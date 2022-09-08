@@ -44,6 +44,9 @@ namespace Bookstore.Repositories
         private Department_Repository _Department_Repository;
         public Department_Repository Department { get { return _Department_Repository ?? (_Department_Repository = (Department_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Department")); } }
 
+        private Disposal_Repository _Disposal_Repository;
+        public Disposal_Repository Disposal { get { return _Disposal_Repository ?? (_Disposal_Repository = (Disposal_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Disposal")); } }
+
         private Education_Repository _Education_Repository;
         public Education_Repository Education { get { return _Education_Repository ?? (_Education_Repository = (Education_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Education")); } }
 
@@ -67,6 +70,9 @@ namespace Bookstore.Repositories
 
         private Person_Repository _Person_Repository;
         public Person_Repository Person { get { return _Person_Repository ?? (_Person_Repository = (Person_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Person")); } }
+
+        private PersonInfo_Repository _PersonInfo_Repository;
+        public PersonInfo_Repository PersonInfo { get { return _PersonInfo_Repository ?? (_PersonInfo_Repository = (PersonInfo_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.PersonInfo")); } }
 
         private Topic_Repository _Topic_Repository;
         public Topic_Repository Topic { get { return _Topic_Repository ?? (_Topic_Repository = (Topic_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Topic")); } }
@@ -101,8 +107,11 @@ namespace Bookstore.Repositories
         {
             return new KeyValuePair<string, Type>[]
             {
+                new KeyValuePair<string, Type>(@"ComplexSearch", typeof(ComplexSearch)),
                 new KeyValuePair<string, Type>(@"Bookstore.CommonMisspelling", typeof(Bookstore.CommonMisspelling)),
+                new KeyValuePair<string, Type>(@"Bookstore.LongBooks", typeof(Bookstore.LongBooks)),
                 new KeyValuePair<string, Type>(@"Bookstore.SystemRequiredCode", typeof(Bookstore.SystemRequiredCode)),
+                new KeyValuePair<string, Type>(@"LongBooks3", typeof(LongBooks3)),
                 /*DataStructureInfo ReadParameterTypes Bookstore.Book*/
             };
         }
@@ -217,6 +226,8 @@ namespace Bookstore.Repositories
                         ((Rhetos.UserException)interpretedException).SystemMessage = @"DataStructure:Bookstore.ChildrensBook,Property:ID,Referenced:Bookstore.Book";
                     if (interpretedException is Rhetos.UserException && Rhetos.Utilities.MsSqlUtility.IsReferenceErrorOnDelete(interpretedException, @"Bookstore.Comment", @"BookID", @"FK_Comment_Book_BookID"))
                         ((Rhetos.UserException)interpretedException).SystemMessage = @"DataStructure:Bookstore.Comment,Property:BookID,Referenced:Bookstore.Book";
+                    if (interpretedException is Rhetos.UserException && Rhetos.Utilities.MsSqlUtility.IsReferenceErrorOnDelete(interpretedException, @"Bookstore.Disposal", @"BookID", @"FK_Disposal_Book_BookID"))
+                        ((Rhetos.UserException)interpretedException).SystemMessage = @"DataStructure:Bookstore.Disposal,Property:BookID,Referenced:Bookstore.Book";
                     if (interpretedException is Rhetos.UserException && Rhetos.Utilities.MsSqlUtility.IsReferenceErrorOnDelete(interpretedException, @"Bookstore.ForeignBook", @"ID", @"FK_ForeignBook_Book_ID"))
                         ((Rhetos.UserException)interpretedException).SystemMessage = @"DataStructure:Bookstore.ForeignBook,Property:ID,Referenced:Bookstore.Book";
                     if (interpretedException is Rhetos.UserException && Rhetos.Utilities.MsSqlUtility.IsReferenceErrorOnInsertUpdate(interpretedException, @"Bookstore.Person", @"ID", @"FK_Book_Person_AuthorID"))
@@ -272,6 +283,26 @@ namespace Bookstore.Repositories
             yield break;
         }
 
+        public global::Bookstore.Book[] Load(ComplexSearch filter_Parameter)
+        {
+            Func<Common.DomRepository, ComplexSearch/*FilterByInfo AdditionalParametersType Bookstore.Book.ComplexSearch*/, Bookstore.Book[]> filter_Function =
+                (repository, parameter) =>
+        {
+            var query = repository.Bookstore.Book.Query(item => item.NumberOfPages >= parameter.MinimumPages);
+            if (parameter.ForeignBooksOnly == true)
+                query = query.Where(item => item.Extension_ForeignBook.ID != null);
+            Book[] books = query.ToSimple().ToArray();
+
+            if (parameter.MaskTitles == true)
+                foreach (var book in books.Where(b => !string.IsNullOrEmpty(b.Title)))
+                    book.Title = book.Title.First() + "***" + book.Title.Last();
+
+            return books;
+        };
+
+            return filter_Function(_domRepository, filter_Parameter/*FilterByInfo AdditionalParametersArgument Bookstore.Book.ComplexSearch*/);
+        }
+
         public IEnumerable<InvalidDataMessage> GetErrorMessage_CommonMisspelling(IEnumerable<Guid> invalidData_Ids)
         {
             IDictionary<string, object> metadata = new Dictionary<string, object>();
@@ -307,9 +338,26 @@ namespace Bookstore.Repositories
             return source.Where(book => book.Title.Contains("curiousity"));
         }
 
+        public IQueryable<Common.Queryable.Bookstore_Book> Filter(IQueryable<Common.Queryable.Bookstore_Book> source, Bookstore.LongBooks parameter)
+        {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Book.'Bookstore.LongBooks'*/
+            return source.Where(item => item.NumberOfPages >= 500);
+        }
+
         public IQueryable<Common.Queryable.Bookstore_Book> Filter(IQueryable<Common.Queryable.Bookstore_Book> source, Bookstore.SystemRequiredCode parameter)
         {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Book.'Bookstore.SystemRequiredCode'*/
             return source.Where(item => item.Code == null);
+        }
+
+        public IQueryable<Common.Queryable.Bookstore_Book> Filter(IQueryable<Common.Queryable.Bookstore_Book> query, LongBooks3 parameter)
+        {/*ComposableFilterByInfo BeforeFilter Bookstore.Book.LongBooks3*/
+            // Suppressing additional expression arguments in optimized ComposableFilterBy format (configuration option CommonConcepts:ComposableFilterByOptimizeLambda)
+            // /*ComposableFilterByInfo AdditionalParametersArgument Bookstore.Book.LongBooks3*/
+            // /*ComposableFilterByInfo AdditionalParametersType Bookstore.Book.LongBooks3*/
+            
+            var filtered = query.Where(item => item.NumberOfPages >= parameter.MinimumPages);
+                if (parameter.ForeignBooksOnly == true)
+                    filtered = filtered.Where(item => item.Extension_ForeignBook.ID != null);
+                return filtered;
         }
 
         /*DataStructureInfo RepositoryMembers Bookstore.Book*/
@@ -901,6 +949,232 @@ namespace Bookstore.Repositories
         }
 
         /*DataStructureInfo RepositoryMembers Bookstore.Department*/
+    }
+
+    /*DataStructureInfo RepositoryAttributes Bookstore.Disposal*/
+    public partial class Disposal_Repository : /*DataStructureInfo OverrideBaseType Bookstore.Disposal*/ Common.OrmRepositoryBase<Common.Queryable.Bookstore_Disposal, Bookstore.Disposal> // Common.QueryableRepositoryBase<Common.Queryable.Bookstore_Disposal, Bookstore.Disposal> // Common.ReadableRepositoryBase<Bookstore.Disposal> // global::Common.RepositoryBase
+        , IWritableRepository<Bookstore.Disposal>, IValidateRepository/*DataStructureInfo RepositoryInterface Bookstore.Disposal*/
+    {
+        private readonly Rhetos.Utilities.ILocalizer<Bookstore.Disposal> _localizer;
+        private readonly Rhetos.Utilities.ISqlUtility _sqlUtility;
+        /*DataStructureInfo RepositoryPrivateMembers Bookstore.Disposal*/
+
+        public Disposal_Repository(Common.DomRepository domRepository, Common.ExecutionContext executionContext, Rhetos.Utilities.ILocalizer<Bookstore.Disposal> _localizer, Rhetos.Utilities.ISqlUtility _sqlUtility/*DataStructureInfo RepositoryConstructorArguments Bookstore.Disposal*/)
+        {
+            _domRepository = domRepository;
+            _executionContext = executionContext;
+            this._localizer = _localizer;
+            this._sqlUtility = _sqlUtility;
+            /*DataStructureInfo RepositoryConstructorCode Bookstore.Disposal*/
+        }
+
+        public static KeyValuePair<string, Type>[] GetReadParameterTypes()
+        {
+            return new KeyValuePair<string, Type>[]
+            {
+                new KeyValuePair<string, Type>(@"Bookstore.ExplanationSpecialCharacters", typeof(Bookstore.ExplanationSpecialCharacters)),
+                new KeyValuePair<string, Type>(@"Bookstore.ExplanationTooLong", typeof(Bookstore.ExplanationTooLong)),
+                new KeyValuePair<string, Type>(@"Bookstore.HighRating", typeof(Bookstore.HighRating)),
+                new KeyValuePair<string, Type>(@"Bookstore.ImportantBookExplanation", typeof(Bookstore.ImportantBookExplanation)),
+                /*DataStructureInfo ReadParameterTypes Bookstore.Disposal*/
+            };
+        }
+        
+        public virtual void Save(IEnumerable<Bookstore.Disposal> insertedNew, IEnumerable<Bookstore.Disposal> updatedNew, IEnumerable<Bookstore.Disposal> deletedIds, bool checkUserPermissions = false)
+        {
+            if (!DomHelper.InitializeSaveMethodItems(ref insertedNew, ref updatedNew, ref deletedIds))
+                return;
+
+            /*DataStructureInfo WritableOrm ClearContext Bookstore.Disposal*/
+
+            /*DataStructureInfo WritableOrm ArgumentValidation Bookstore.Disposal*/
+
+            { 
+                var now = SqlUtility.GetDatabaseTime(_executionContext.SqlExecuter);
+
+                foreach (var newItem in insertedNew)
+                    if(newItem.EffectiveSince == null)
+                        newItem.EffectiveSince = now;
+            }
+            /*DataStructureInfo WritableOrm Initialization Bookstore.Disposal*/
+
+            // Using old data, including lazy loading of navigation properties:
+
+            IEnumerable<Common.Queryable.Bookstore_Disposal> deleted = DomHelper.LoadOldDataWithNavigationProperties(deletedIds, this);
+            IEnumerable<Common.Queryable.Bookstore_Disposal> updated = DomHelper.LoadOldDataWithNavigationProperties(updatedNew, this);
+
+            /*DataStructureInfo WritableOrm OldDataLoaded Bookstore.Disposal*/
+
+            {
+                var invalid = insertedNew.Concat(updatedNew).FirstOrDefault(item => item.BookID == null /*RequiredPropertyInfo OrCondition Bookstore.Disposal.Book*/);
+                if (invalid != null)
+                    throw new Rhetos.UserException("It is not allowed to enter {0} because the required property {1} is not set.",
+                        new[] { _localizer["Bookstore.Disposal"], _localizer["Book"] },
+                        "DataStructure:Bookstore.Disposal,ID:" + invalid.ID.ToString() + ",Property:BookID", null);
+            }
+            {
+                var invalid = insertedNew.Concat(updatedNew).FirstOrDefault(item => item.Explanation == null || string.IsNullOrWhiteSpace(item.Explanation) /*RequiredPropertyInfo OrCondition Bookstore.Disposal.Explanation*/);
+                if (invalid != null)
+                    throw new Rhetos.UserException("It is not allowed to enter {0} because the required property {1} is not set.",
+                        new[] { _localizer["Bookstore.Disposal"], _localizer["Explanation"] },
+                        "DataStructure:Bookstore.Disposal,ID:" + invalid.ID.ToString() + ",Property:Explanation", null);
+            }
+            /*DataStructureInfo WritableOrm ProcessedOldData Bookstore.Disposal*/
+
+            {
+                DomHelper.WriteToDatabase(insertedNew, updatedNew, deletedIds, _executionContext.PersistenceStorage, checkUserPermissions, _sqlUtility,
+                    out Exception saveException, out Rhetos.RhetosException interpretedException);
+
+                if (saveException != null)
+                {
+                    if (interpretedException is Rhetos.UserException && Rhetos.Utilities.MsSqlUtility.IsReferenceErrorOnInsertUpdate(interpretedException, @"Bookstore.Book", @"ID", @"FK_Disposal_Book_BookID"))
+                        ((Rhetos.UserException)interpretedException).SystemMessage = @"DataStructure:Bookstore.Disposal,Property:BookID,Referenced:Bookstore.Book";
+                    /*DataStructureInfo WritableOrm OnDatabaseError Bookstore.Disposal*/
+                    DomHelper.ThrowInterpretedException(checkUserPermissions, saveException, interpretedException, _sqlUtility, "Bookstore.Disposal");
+                }
+            }
+
+            deleted = null;
+            updated = this.Query(updatedNew.Select(item => item.ID));
+            IEnumerable<Common.Queryable.Bookstore_Disposal> inserted = this.Query(insertedNew.Select(item => item.ID));
+
+            bool allEffectsCompleted = false;
+            try
+            {
+                /*DataStructureInfo WritableOrm OnSaveTag1 Bookstore.Disposal*/
+
+                /*DataStructureInfo WritableOrm OnSaveTag2 Bookstore.Disposal*/
+
+                Rhetos.Dom.DefaultConcepts.InvalidDataMessage.ValidateOnSave(insertedNew, updatedNew, this, "Bookstore.Disposal");
+
+                /*DataStructureInfo WritableOrm AfterSave Bookstore.Disposal*/
+
+                allEffectsCompleted = true;
+            }
+            finally
+            {
+                if (!allEffectsCompleted)
+                    _executionContext.PersistenceTransaction.DiscardOnDispose();
+            }
+        }
+
+        public IEnumerable<Rhetos.Dom.DefaultConcepts.InvalidDataMessage> Validate(IList<Guid> ids, bool onSave)
+        {
+            if (onSave)
+            {
+                var errorIds = this.Filter(this.Query(ids), new ExplanationSpecialCharacters()).Select(item => item.ID).ToArray();
+                if (errorIds.Count() > 0)
+                    foreach (var error in GetErrorMessage_ExplanationSpecialCharacters(errorIds))
+                        yield return error;
+            }
+            if (onSave)
+            {
+                var errorIds = this.Filter(this.Query(ids), new ExplanationTooLong()).Select(item => item.ID).ToArray();
+                if (errorIds.Count() > 0)
+                    foreach (var error in GetErrorMessage_ExplanationTooLong(errorIds))
+                        yield return error;
+            }
+            if (onSave)
+            {
+                var errorIds = this.Filter(this.Query(ids), new HighRating()).Select(item => item.ID).ToArray();
+                if (errorIds.Count() > 0)
+                    foreach (var error in GetErrorMessage_HighRating(errorIds))
+                        yield return error;
+            }
+            if (onSave)
+            {
+                var errorIds = this.Filter(this.Query(ids), new ImportantBookExplanation()).Select(item => item.ID).ToArray();
+                if (errorIds.Count() > 0)
+                    foreach (var error in GetErrorMessage_ImportantBookExplanation(errorIds))
+                        yield return error;
+            }
+            /*DataStructureInfo WritableOrm OnSaveValidate Bookstore.Disposal*/
+            yield break;
+        }
+
+        public IEnumerable<InvalidDataMessage> GetErrorMessage_ExplanationSpecialCharacters(IEnumerable<Guid> invalidData_Ids)
+        {
+            IDictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["Validation"] = @"ExplanationSpecialCharacters";
+            /*InvalidDataInfo ErrorMetadata Bookstore.Disposal.ExplanationSpecialCharacters*/
+            /*InvalidDataInfo CustomValidationResult Bookstore.Disposal.ExplanationSpecialCharacters*/
+            Func<IEnumerable<Guid>, IEnumerable<InvalidDataMessage>> invalidData_Func = ids => this.Query(ids)
+				.Select(item => new { item.ID, BookTitle = item.Book.Title })
+				.ToList()
+				.Select(item => new InvalidDataMessage
+				{
+					ID = item.ID,
+					Message = "The explanation for \"{0}\" contains character \"#\" or \"$\".",
+					MessageParameters = new object[] { item.BookTitle },
+					Metadata = metadata
+				});
+            return invalidData_Func(invalidData_Ids);
+        }
+
+        public IEnumerable<InvalidDataMessage> GetErrorMessage_ExplanationTooLong(IEnumerable<Guid> invalidData_Ids)
+        {
+            IDictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["Validation"] = @"ExplanationTooLong";
+            /*InvalidDataInfo ErrorMetadata Bookstore.Disposal.ExplanationTooLong*/
+            /*InvalidDataInfo CustomValidationResult Bookstore.Disposal.ExplanationTooLong*/
+            return invalidData_Ids.Select(id => new InvalidDataMessage
+            {
+                ID = id,
+                Message = @"The {0} cannot be longer then {1} characters.",
+                MessageParameters = new object[] { "Explanation", 500 },
+                Metadata = metadata
+            });
+        }
+
+        public IEnumerable<InvalidDataMessage> GetErrorMessage_HighRating(IEnumerable<Guid> invalidData_Ids)
+        {
+            IDictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["Validation"] = @"HighRating";
+            /*InvalidDataInfo ErrorMetadata Bookstore.Disposal.HighRating*/
+            /*InvalidDataInfo CustomValidationResult Bookstore.Disposal.HighRating*/
+            return invalidData_Ids.Select(id => new InvalidDataMessage
+            {
+                ID = id,
+                Message = @"You are not allowed to dispose a book with rating above 100.",
+                Metadata = metadata
+            });
+        }
+
+        public IEnumerable<InvalidDataMessage> GetErrorMessage_ImportantBookExplanation(IEnumerable<Guid> invalidData_Ids)
+        {
+            IDictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["Validation"] = @"ImportantBookExplanation";
+            /*InvalidDataInfo ErrorMetadata Bookstore.Disposal.ImportantBookExplanation*/
+            /*InvalidDataInfo CustomValidationResult Bookstore.Disposal.ImportantBookExplanation*/
+            return invalidData_Ids.Select(id => new InvalidDataMessage
+            {
+                ID = id,
+                Message = @"When disposing an important book, the explanation should be at least 50 characters long.",
+                Metadata = metadata
+            });
+        }
+
+        public IQueryable<Common.Queryable.Bookstore_Disposal> Filter(IQueryable<Common.Queryable.Bookstore_Disposal> source, Bookstore.ExplanationSpecialCharacters parameter)
+        {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Disposal.'Bookstore.ExplanationSpecialCharacters'*/
+            return source.Where(item => item.Explanation.Contains("#") || item.Explanation.Contains("$"));
+        }
+
+        public IQueryable<Common.Queryable.Bookstore_Disposal> Filter(IQueryable<Common.Queryable.Bookstore_Disposal> source, Bookstore.ExplanationTooLong parameter)
+        {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Disposal.'Bookstore.ExplanationTooLong'*/
+            return source.Where(item => item.Explanation.Length > 500);
+        }
+
+        public IQueryable<Common.Queryable.Bookstore_Disposal> Filter(IQueryable<Common.Queryable.Bookstore_Disposal> source, Bookstore.HighRating parameter)
+        {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Disposal.'Bookstore.HighRating'*/
+            return source.Where(item => item.Book.Extension_ExpectedBookRating.Rating > 100);
+        }
+
+        public IQueryable<Common.Queryable.Bookstore_Disposal> Filter(IQueryable<Common.Queryable.Bookstore_Disposal> source, Bookstore.ImportantBookExplanation parameter)
+        {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Disposal.'Bookstore.ImportantBookExplanation'*/
+            return source.Where(item => item.Book.Title.Contains("important") && item.Explanation.Length < 50);
+        }
+
+        /*DataStructureInfo RepositoryMembers Bookstore.Disposal*/
     }
 
     /*DataStructureInfo RepositoryAttributes Bookstore.Education*/
@@ -1897,6 +2171,57 @@ namespace Bookstore.Repositories
         }
 
         /*DataStructureInfo RepositoryMembers Bookstore.Person*/
+    }
+
+    /*DataStructureInfo RepositoryAttributes Bookstore.PersonInfo*/
+    public partial class PersonInfo_Repository : /*DataStructureInfo OverrideBaseType Bookstore.PersonInfo*/ Common.ReadableRepositoryBase<Bookstore.PersonInfo> // global::Common.RepositoryBase
+        /*DataStructureInfo RepositoryInterface Bookstore.PersonInfo*/
+    {
+        /*DataStructureInfo RepositoryPrivateMembers Bookstore.PersonInfo*/
+
+        public PersonInfo_Repository(Common.DomRepository domRepository, Common.ExecutionContext executionContext/*DataStructureInfo RepositoryConstructorArguments Bookstore.PersonInfo*/)
+        {
+            _domRepository = domRepository;
+            _executionContext = executionContext;
+            /*DataStructureInfo RepositoryConstructorCode Bookstore.PersonInfo*/
+        }
+
+        public override global::Bookstore.PersonInfo[] Load()
+        {
+            Func<Common.DomRepository/*DataStructureInfo AdditionalParametersType Bookstore.PersonInfo*/, global::Bookstore.PersonInfo[]> compute_Function =
+            repository => { throw new Rhetos.UserException("Use filter \"Bookstore.PersonFilter\" to read the data."); };
+
+            return compute_Function(_domRepository/*DataStructureInfo AdditionalParametersArgument Bookstore.PersonInfo*/);
+        }
+
+        public static KeyValuePair<string, Type>[] GetReadParameterTypes()
+        {
+            return new KeyValuePair<string, Type>[]
+            {
+                new KeyValuePair<string, Type>(@"PersonFilter", typeof(PersonFilter)),
+                /*DataStructureInfo ReadParameterTypes Bookstore.PersonInfo*/
+            };
+        }
+        
+        public global::Bookstore.PersonInfo[] Load(PersonFilter filter_Parameter)
+        {
+            Func<Common.DomRepository, PersonFilter/*FilterByInfo AdditionalParametersType Bookstore.PersonInfo.PersonFilter*/, Bookstore.PersonInfo[]> filter_Function =
+                (repository, parameter) =>
+            {
+                // Always separate parameters to prevent SQL injection.
+                string sql = "EXEC Bookstore.ComputePersonInfo @p0, @p1";
+                var sqlParams = new object[] { parameter.NamePattern, parameter.LimitResultCount };
+
+                var result = _executionContext.EntityFrameworkContext.Database
+                    .SqlQuery<Bookstore.PersonInfo>(sql, sqlParams)
+                    .ToArray();
+                return result;
+            };
+
+            return filter_Function(_domRepository, filter_Parameter/*FilterByInfo AdditionalParametersArgument Bookstore.PersonInfo.PersonFilter*/);
+        }
+
+        /*DataStructureInfo RepositoryMembers Bookstore.PersonInfo*/
     }
 
     /*DataStructureInfo RepositoryAttributes Bookstore.Topic*/

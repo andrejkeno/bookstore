@@ -47,6 +47,7 @@ namespace Common
         public System.Data.Entity.DbSet<Common.Queryable.Bookstore_ChildrensBook> Bookstore_ChildrensBook { get; set; }
         public System.Data.Entity.DbSet<Common.Queryable.Bookstore_Comment> Bookstore_Comment { get; set; }
         public System.Data.Entity.DbSet<Common.Queryable.Bookstore_Department> Bookstore_Department { get; set; }
+        public System.Data.Entity.DbSet<Common.Queryable.Bookstore_Disposal> Bookstore_Disposal { get; set; }
         public System.Data.Entity.DbSet<Common.Queryable.Bookstore_Education> Bookstore_Education { get; set; }
         public System.Data.Entity.DbSet<Common.Queryable.Bookstore_Employee> Bookstore_Employee { get; set; }
         public System.Data.Entity.DbSet<Common.Queryable.Bookstore_EmployeeDepartment> Bookstore_EmployeeDepartment { get; set; }

@@ -88,6 +88,17 @@ namespace System.Linq
             });
         }
         /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>
+        public static IQueryable<Bookstore.Disposal> ToSimple(this IQueryable<Common.Queryable.Bookstore_Disposal> query)
+        {
+            return query.Select(item => new Bookstore.Disposal
+            {
+                ID = item.ID,
+                BookID = item.BookID,
+                EffectiveSince = item.EffectiveSince,
+                Explanation = item.Explanation/*DataStructureInfo AssignSimpleProperty Bookstore.Disposal*/
+            });
+        }
+        /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>
         public static IQueryable<Bookstore.Education> ToSimple(this IQueryable<Common.Queryable.Bookstore_Education> query)
         {
             return query.Select(item => new Bookstore.Education
@@ -161,6 +172,17 @@ namespace System.Linq
             {
                 ID = item.ID,
                 Name = item.Name/*DataStructureInfo AssignSimpleProperty Bookstore.Person*/
+            });
+        }
+        /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>
+        public static IQueryable<Bookstore.PersonInfo> ToSimple(this IQueryable<Common.Queryable.Bookstore_PersonInfo> query)
+        {
+            return query.Select(item => new Bookstore.PersonInfo
+            {
+                ID = item.ID,
+                Name = item.Name,
+                NameLength = item.NameLength,
+                PersonID = item.PersonID/*DataStructureInfo AssignSimpleProperty Bookstore.PersonInfo*/
             });
         }
         /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>

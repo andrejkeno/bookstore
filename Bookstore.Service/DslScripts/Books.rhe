@@ -1,47 +1,124 @@
-﻿//Module Bookstore
-//{
-//   Entity Book
-//   {
-//      ShortString Code { AutoCode; }
-//      ShortString Title;
-//      Integer NumberOfPages;
-//      ShortString SomeProperty;
+﻿// flat example
+//Module Bookstore;
+//Entity Bookstore.Book;
 //
-//      ItemFilter CommonMisspelling 'book => book.Title.Contains("curiousity")';
-//      InvalidData CommonMisspelling 'It is not allowed to enter misspelled word "curiousity".';
+//ShortString Bookstore.Book.Code;
+//AutoCode Bookstore.Book.Code;
+//Required Bookstore.Book.Code;
+//Unique Bookstore.Book.Code;
 //
-//      Logging;
-//   }
-//}
-
-// flat example
-Module Bookstore;
-Entity Bookstore.Book;
-
-ShortString Bookstore.Book.Code;
-AutoCode Bookstore.Book.Code;
-Required Bookstore.Book.Code;
-Unique Bookstore.Book.Code;
-
-ShortString Bookstore.Book.Title;
-Required Bookstore.Book.Title;
-
-Integer Bookstore.Book.NumberOfPages;
-ShortString Bookstore.Book.SomeProperty;
-
-ItemFilter Bookstore.Book.CommonMisspelling 'book => book.Title.Contains("curiousity")';
-InvalidData Bookstore.Book.CommonMisspelling 'It is not allowed to enter misspelled word "curiousity".';
-
-Logging Bookstore.Book;
-Reference Bookstore.Book Author Bookstore.Person;
+//ShortString Bookstore.Book.Title;
+//Required Bookstore.Book.Title;
+//
+//Integer Bookstore.Book.NumberOfPages;
+//ShortString Bookstore.Book.SomeProperty;
+//
+//Reference Bookstore.Book Author Bookstore.Person;
+//
+//ItemFilter Bookstore.Book.CommonMisspelling 'book => book.Title.Contains("curiousity")';
+//InvalidData Bookstore.Book.CommonMisspelling 'It is not allowed to enter misspelled word "curiousity".';
+//
+//ItemFilter Bookstore.Book.LongBooks 'item => item.NumberOfPages >= 500';
+//
+//Logging Bookstore.Book;
 
 // nested
 Module Bookstore
 {
+	Entity Book
+	{
+	   ShortString Code { AutoCode; Required; Unique; }
+	   ShortString Title { Required; }
+	   Integer NumberOfPages;
+	   ShortString SomeProperty;
+
+	   Reference Author Bookstore.Person;
+
+	   ItemFilter CommonMisspelling 'book => book.Title.Contains("curiousity")';
+	   InvalidData CommonMisspelling 'It is not allowed to enter misspelled word "curiousity".';
+
+	   Logging;
+	   ItemFilter LongBooks 'item => item.NumberOfPages >= 500';
+
+	   ComposableFilterBy LongBooks3 '(query, repository, parameter) =>
+            {
+                var filtered = query.Where(item => item.NumberOfPages >= parameter.MinimumPages);
+                if (parameter.ForeignBooksOnly == true)
+                    filtered = filtered.Where(item => item.Extension_ForeignBook.ID != null);
+                return filtered;
+            }';
+
+		FilterBy ComplexSearch '(repository, parameter) =>
+        {
+            var query = repository.Bookstore.Book.Query(item => item.NumberOfPages >= parameter.MinimumPages);
+            if (parameter.ForeignBooksOnly == true)
+                query = query.Where(item => item.Extension_ForeignBook.ID != null);
+            Book[] books = query.ToSimple().ToArray();
+
+            if (parameter.MaskTitles == true)
+                foreach (var book in books.Where(b => !string.IsNullOrEmpty(b.Title)))
+                    book.Title = book.Title.First() + "***" + book.Title.Last();
+
+            return books;
+        }';
+	}
+
+	Parameter LongBooks3
+	{
+		Integer MinimumPages;
+		Bool ForeignBooksOnly;
+	}
+
+	Parameter ComplexSearch
+    {
+        Integer MinimumPages;
+        Bool ForeignBooksOnly;
+        Bool MaskTitles;
+    }
+
 	Entity Person
 	{
 		ShortString Name;
 	}
+
+	SqlProcedure ComputePersonInfo
+        "@NamePattern NVARCHAR(256), @LimitResultCount INT"
+        "
+            SELECT TOP (@LimitResultCount)
+                p.ID, Name, NameLength = LEN(p.Name), PersonID = p.ID
+            FROM
+                Demo.Person p
+            WHERE
+                p.Name LIKE '%' + @NamePattern + '%'
+            ORDER BY
+                p.Name
+        ";
+
+	Parameter PersonFilter
+    {
+        ShortString NamePattern;
+        Integer LimitResultCount;
+    }
+
+	Computed PersonInfo 'repository => { throw new Rhetos.UserException("Use filter \"Bookstore.PersonFilter\" to read the data."); }'
+    {
+        ShortString Name;
+        Integer NameLength;
+        Guid PersonID;
+
+        FilterBy PersonFilter
+            '(repository, parameter) =>
+            {
+                // Always separate parameters to prevent SQL injection.
+                string sql = "EXEC Bookstore.ComputePersonInfo @p0, @p1";
+                var sqlParams = new object[] { parameter.NamePattern, parameter.LimitResultCount };
+
+                var result = _executionContext.EntityFrameworkContext.Database
+                    .SqlQuery<Bookstore.PersonInfo>(sql, sqlParams)
+                    .ToArray();
+                return result;
+            }';
+    }
 
 	Entity Comment
 	{
@@ -118,6 +195,50 @@ Module Bookstore
 		Integer NumberOfTopics;
 
 		AutodetectSqlDependencies;
+	}
+
+	SqlView ActiveEmployees <SQL\ActiveEmployees.sql>;
+
+	Entity Disposal
+    {
+        Reference Book { Required; }
+        LongString Explanation { Required; }
+        DateTime EffectiveSince { CreationTime; }
+    }
+
+	Entity Disposal
+	{
+		Reference Book { Required; }
+		LongString Explanation { Required; }
+		DateTime EffectiveSince { CreationTime; }
+
+		ItemFilter ImportantBookExplanation 'item => item.Book.Title.Contains("important") && item.Explanation.Length < 50';
+		InvalidData ImportantBookExplanation 'When disposing an important book, the explanation should be at least 50 characters long.';
+
+		ItemFilter HighRating 'item => item.Book.Extension_ExpectedBookRating.Rating > 100';
+		InvalidData HighRating 'You are not allowed to dispose a book with rating above 100.';
+
+		ItemFilter ExplanationTooLong 'item => item.Explanation.Length > 500';
+		InvalidData ExplanationTooLong 'The {0} cannot be longer then {1} characters.'
+		{
+			MessageParametersConstant '"Explanation", 500';
+		}
+
+		ItemFilter ExplanationSpecialCharacters 'item => item.Explanation.Contains("#") || item.Explanation.Contains("$")';
+		InvalidData ExplanationSpecialCharacters 'The explanation should not contain special characters.'
+		{
+			// Full control over validation's error message and metadata:
+			MessageFunction 'ids => this.Query(ids)
+				.Select(item => new { item.ID, BookTitle = item.Book.Title })
+				.ToList()
+				.Select(item => new InvalidDataMessage
+				{
+					ID = item.ID,
+					Message = "The explanation for \"{0}\" contains character \"#\" or \"$\".",
+					MessageParameters = new object[] { item.BookTitle },
+					Metadata = metadata
+				})';
+		}
 	}
 
 	Computed ExpectedBookRating 'repository =>

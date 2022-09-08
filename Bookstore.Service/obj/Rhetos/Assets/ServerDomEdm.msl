@@ -67,6 +67,16 @@
       </MappingFragment>
     </EntityTypeMapping>
   </EntitySetMapping>
+  <EntitySetMapping Name="Bookstore_Disposal">
+    <EntityTypeMapping TypeName="Rhetos.Bookstore_Disposal">
+      <MappingFragment StoreEntitySet="Bookstore_Disposal">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+        <ScalarProperty Name="BookID" ColumnName="BookID" />
+        <ScalarProperty Name="EffectiveSince" ColumnName="EffectiveSince" />
+        <ScalarProperty Name="Explanation" ColumnName="Explanation" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
   <EntitySetMapping Name="Bookstore_Education">
     <EntityTypeMapping TypeName="Rhetos.Bookstore_Education">
       <MappingFragment StoreEntitySet="Bookstore_Education">

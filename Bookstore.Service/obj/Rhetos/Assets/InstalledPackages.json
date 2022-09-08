@@ -9371,6 +9371,10 @@
           "InPackagePath": "DslScripts\\Employees.rhe"
         },
         {
+          "PhysicalPath": "C:\\Omega\\Bookstore\\Bookstore.Service\\DslScripts\\SQL\\ActiveEmployees.sql",
+          "InPackagePath": "DslScripts\\SQL\\ActiveEmployees.sql"
+        },
+        {
           "PhysicalPath": "C:\\Omega\\Bookstore\\Bookstore.Service\\DslScripts\\SQL\\BookInfo.sql",
           "InPackagePath": "DslScripts\\SQL\\BookInfo.sql"
         },

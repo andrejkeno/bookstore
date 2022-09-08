@@ -21,6 +21,7 @@ namespace Common
             _mappings.Add(typeof(Bookstore.ChildrensBook), new Bookstore_ChildrensBook_Mapper());
             _mappings.Add(typeof(Bookstore.Comment), new Bookstore_Comment_Mapper());
             _mappings.Add(typeof(Bookstore.Department), new Bookstore_Department_Mapper());
+            _mappings.Add(typeof(Bookstore.Disposal), new Bookstore_Disposal_Mapper());
             _mappings.Add(typeof(Bookstore.Education), new Bookstore_Education_Mapper());
             _mappings.Add(typeof(Bookstore.Employee), new Bookstore_Employee_Mapper());
             _mappings.Add(typeof(Bookstore.EmployeeDepartment), new Bookstore_EmployeeDepartment_Mapper());
@@ -191,6 +192,34 @@ namespace Common
     	public string GetTableName()
         {
             return "Bookstore.Department";
+        }
+    }
+
+    public class Bookstore_Disposal_Mapper : IPersistenceStorageObjectMapper
+    {
+        public PersistenceStorageObjectParameter[] GetParameters(IEntity genericEntity)
+        {
+            var entity = (Bookstore.Disposal)genericEntity;
+            return new PersistenceStorageObjectParameter[]
+            {
+                new PersistenceStorageObjectParameter("ID", new SqlParameter("", System.Data.SqlDbType.UniqueIdentifier) { Value = entity.ID }),
+                new PersistenceStorageObjectParameter("BookID", new SqlParameter("", System.Data.SqlDbType.UniqueIdentifier) { Value = ((object)entity.BookID) ?? DBNull.Value }),
+                new PersistenceStorageObjectParameter("EffectiveSince", new SqlParameter("", System.Data.SqlDbType.DateTime2) { Value = ((object)entity.EffectiveSince) ?? DBNull.Value, Scale = 3 }),
+                new PersistenceStorageObjectParameter("Explanation", new SqlParameter("", System.Data.SqlDbType.NVarChar) { Value = ((object)entity.Explanation) ?? DBNull.Value }),
+                /*DataStructureInfo PersistenceStorageMapperPropertyMapping Bookstore.Disposal*/
+            };
+        }
+    
+    	public IEnumerable<Guid> GetDependencies(IEntity genericEntity)
+        {
+            var entity = (Bookstore.Disposal)genericEntity;
+            /*DataStructureInfo PersistenceStorageMapperDependencyResolution Bookstore.Disposal*/
+            yield break;
+        }
+    
+    	public string GetTableName()
+        {
+            return "Bookstore.Disposal";
         }
     }
 
