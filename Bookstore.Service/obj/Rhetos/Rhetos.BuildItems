@@ -1,2 +1,4 @@
 DslScripts\Books.rhe
 DslScripts\Employees.rhe
+DslScripts\SQL\BookInfo.sql
+DslScripts\SQL\BookTopics.sql

@@ -56,13 +56,16 @@ namespace Common
         public static readonly Dictionary<string, Func<KeyValuePair<string, Type>[]>> DataStructuresReadParameterTypes = new()
         {
             { "Bookstore.Book", Bookstore.Repositories.Book_Repository.GetReadParameterTypes },
+            { "Bookstore.BookInfo", Bookstore.Repositories.BookInfo_Repository.GetReadParameterTypes },
             { "Bookstore.BookTopic", Bookstore.Repositories.BookTopic_Repository.GetReadParameterTypes },
+            { "Bookstore.BookTopics", Bookstore.Repositories.BookTopics_Repository.GetReadParameterTypes },
             { "Bookstore.ChildrensBook", Bookstore.Repositories.ChildrensBook_Repository.GetReadParameterTypes },
             { "Bookstore.Comment", Bookstore.Repositories.Comment_Repository.GetReadParameterTypes },
             { "Bookstore.Department", Bookstore.Repositories.Department_Repository.GetReadParameterTypes },
             { "Bookstore.Education", Bookstore.Repositories.Education_Repository.GetReadParameterTypes },
             { "Bookstore.Employee", Bookstore.Repositories.Employee_Repository.GetReadParameterTypes },
             { "Bookstore.EmployeeDepartment", Bookstore.Repositories.EmployeeDepartment_Repository.GetReadParameterTypes },
+            { "Bookstore.ExpectedBookRating", Bookstore.Repositories.ExpectedBookRating_Repository.GetReadParameterTypes },
             { "Bookstore.ForeignBook", Bookstore.Repositories.ForeignBook_Repository.GetReadParameterTypes },
             { "Bookstore.Manager", Bookstore.Repositories.Manager_Repository.GetReadParameterTypes },
             { "Bookstore.Person", Bookstore.Repositories.Person_Repository.GetReadParameterTypes },
@@ -83,6 +86,8 @@ namespace Common
             { "Common.Role", Common.Repositories.Role_Repository.GetReadParameterTypes },
             { "Common.RoleInheritsRole", Common.Repositories.RoleInheritsRole_Repository.GetReadParameterTypes },
             { "Common.RolePermission", Common.Repositories.RolePermission_Repository.GetReadParameterTypes },
+            { "Bookstore.BookGrid", Bookstore.Repositories.BookGrid_Repository.GetReadParameterTypes },
+            { "Bookstore.BookTopicsGrid", Bookstore.Repositories.BookTopicsGrid_Repository.GetReadParameterTypes },
             { "Common.MyClaim", Common.Repositories.MyClaim_Repository.GetReadParameterTypes },
             /*DataStructuresReadParameterTypes*/
         };
@@ -197,14 +202,19 @@ namespace Common
             
             builder.RegisterInstance(Infrastructure.CurrentKeepSynchronizedMetadata).ExternallyOwned();
             builder.RegisterType<Bookstore.Repositories.Book_Repository>().Keyed<IRepository>("Bookstore.Book").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.BookInfo_Repository>().Keyed<IRepository>("Bookstore.BookInfo").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.BookTopic_Repository>().Keyed<IRepository>("Bookstore.BookTopic").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.BookTopics_Repository>().Keyed<IRepository>("Bookstore.BookTopics").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.ChildrensBook_Repository>().Keyed<IRepository>("Bookstore.ChildrensBook").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Comment_Repository>().Keyed<IRepository>("Bookstore.Comment").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Department_Repository>().Keyed<IRepository>("Bookstore.Department").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Education_Repository>().Keyed<IRepository>("Bookstore.Education").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Employee_Repository>().Keyed<IRepository>("Bookstore.Employee").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.EmployeeDepartment_Repository>().Keyed<IRepository>("Bookstore.EmployeeDepartment").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.ExpectedBookRating_Repository>().Keyed<IRepository>("Bookstore.ExpectedBookRating").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.ForeignBook_Repository>().Keyed<IRepository>("Bookstore.ForeignBook").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.InsertManyBooks_Repository>().Keyed<IRepository>("Bookstore.InsertManyBooks").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.InsertManyBooks_Repository>().Keyed<IActionRepository>("Bookstore.InsertManyBooks").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Manager_Repository>().Keyed<IRepository>("Bookstore.Manager").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Person_Repository>().Keyed<IRepository>("Bookstore.Person").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Topic_Repository>().Keyed<IRepository>("Bookstore.Topic").InstancePerLifetimeScope();
@@ -230,6 +240,8 @@ namespace Common
             builder.RegisterType<Common.Repositories.RolePermission_Repository>().Keyed<IRepository>("Common.RolePermission").InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.SetLock_Repository>().Keyed<IRepository>("Common.SetLock").InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.SetLock_Repository>().Keyed<IActionRepository>("Common.SetLock").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.BookGrid_Repository>().Keyed<IRepository>("Bookstore.BookGrid").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.BookTopicsGrid_Repository>().Keyed<IRepository>("Bookstore.BookTopicsGrid").InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.MyClaim_Repository>().Keyed<IRepository>("Common.MyClaim").InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.Claim_Repository>().As<IQueryableRepository<Rhetos.Dom.DefaultConcepts.ICommonClaim>>().InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.FilterId_Repository>().As<IQueryableRepository<Rhetos.Dom.DefaultConcepts.ICommonFilterId>>().InstancePerLifetimeScope();

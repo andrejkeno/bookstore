@@ -2,8 +2,23 @@
 {
 	Entity Employee
 	{
+		Integer IdentificationNumber;
 		ShortString Name { Required; }
+		ShortString LastName { Required; }
+		ShortString FirstName { Required; }
+		ShortString Code { RegExMatch "\d{7,10}" "Code must have 7 Bookstore 10 digits."; }
+		DateTime WorkStarted { Required; }
+		DateTime WorkFinished;
+		Integer TestPeriod { MinValue 1; MaxValue 12; }
 		Integer VAT { Unique; }
+
+		Logging { AllProperties; }
+		Deactivatable;
+
+		UniqueMultiple 'LastName FirstName';
+		ItemFilter FinishBeforeStart 'e => e.WorkFinished != null && e.WorkFinished.Value < e.WorkStarted.Value';
+		InvalidData FinishBeforeStart 'It is not allowed to enter a WorkFinished time FinishBeforeStart the WorkStarted time';
+
 	}
 
 	Entity Manager 
@@ -17,7 +32,7 @@
 		Reference Employee { Detail; }
 
 		DateTime DateOfEducation { Required; }
-		LongString Description { Required; }
+		LongString Description { Required; }		
 	}
 
 	Entity EmployeeDepartment

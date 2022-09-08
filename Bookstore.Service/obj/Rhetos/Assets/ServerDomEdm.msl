@@ -13,12 +13,28 @@
       </MappingFragment>
     </EntityTypeMapping>
   </EntitySetMapping>
+  <EntitySetMapping Name="Bookstore_BookInfo">
+    <EntityTypeMapping TypeName="Rhetos.Bookstore_BookInfo">
+      <MappingFragment StoreEntitySet="Bookstore_BookInfo">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+        <ScalarProperty Name="NumberOfComments" ColumnName="NumberOfComments" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
   <EntitySetMapping Name="Bookstore_BookTopic">
     <EntityTypeMapping TypeName="Rhetos.Bookstore_BookTopic">
       <MappingFragment StoreEntitySet="Bookstore_BookTopic">
         <ScalarProperty Name="ID" ColumnName="ID" />
         <ScalarProperty Name="BookID" ColumnName="BookID" />
         <ScalarProperty Name="TopicID" ColumnName="TopicID" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
+  <EntitySetMapping Name="Bookstore_BookTopics">
+    <EntityTypeMapping TypeName="Rhetos.Bookstore_BookTopics">
+      <MappingFragment StoreEntitySet="Bookstore_BookTopics">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+        <ScalarProperty Name="NumberOfTopics" ColumnName="NumberOfTopics" />
       </MappingFragment>
     </EntityTypeMapping>
   </EntitySetMapping>
@@ -36,6 +52,8 @@
       <MappingFragment StoreEntitySet="Bookstore_Comment">
         <ScalarProperty Name="ID" ColumnName="ID" />
         <ScalarProperty Name="BookID" ColumnName="BookID" />
+        <ScalarProperty Name="Created" ColumnName="Created" />
+        <ScalarProperty Name="Modified" ColumnName="Modified" />
         <ScalarProperty Name="Text" ColumnName="Text" />
       </MappingFragment>
     </EntityTypeMapping>
@@ -63,8 +81,16 @@
     <EntityTypeMapping TypeName="Rhetos.Bookstore_Employee">
       <MappingFragment StoreEntitySet="Bookstore_Employee">
         <ScalarProperty Name="ID" ColumnName="ID" />
+        <ScalarProperty Name="Active" ColumnName="Active" />
+        <ScalarProperty Name="Code" ColumnName="Code" />
+        <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+        <ScalarProperty Name="IdentificationNumber" ColumnName="IdentificationNumber" />
+        <ScalarProperty Name="LastName" ColumnName="LastName" />
         <ScalarProperty Name="Name" ColumnName="Name" />
+        <ScalarProperty Name="TestPeriod" ColumnName="TestPeriod" />
         <ScalarProperty Name="VAT" ColumnName="VAT" />
+        <ScalarProperty Name="WorkFinished" ColumnName="WorkFinished" />
+        <ScalarProperty Name="WorkStarted" ColumnName="WorkStarted" />
       </MappingFragment>
     </EntityTypeMapping>
   </EntitySetMapping>
