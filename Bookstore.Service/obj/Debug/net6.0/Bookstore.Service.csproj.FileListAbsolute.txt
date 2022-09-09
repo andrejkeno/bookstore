@@ -162,3 +162,5 @@ C:\Omega\Bookstore\Bookstore.Service\obj\Debug\net6.0\Bookstore.Service.pdb
 C:\Omega\Bookstore\Bookstore.Service\obj\Debug\net6.0\Bookstore.Service.genruntimeconfig.cache
 C:\Omega\Bookstore\Bookstore.Service\obj\Debug\net6.0\ref\Bookstore.Service.dll
 C:\Omega\Bookstore\Bookstore.Service\bin\Debug\net6.0\Rhetos.Host.AspNet.RestApi.dll
+C:\Omega\Bookstore\Bookstore.Service\bin\Debug\net6.0\Bookstore.RhetosExtensions.dll
+C:\Omega\Bookstore\Bookstore.Service\bin\Debug\net6.0\Bookstore.RhetosExtensions.pdb

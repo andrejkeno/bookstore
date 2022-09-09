@@ -9,6 +9,7 @@
         <ScalarProperty Name="NumberOfPages" ColumnName="NumberOfPages" />
         <ScalarProperty Name="SomeProperty" ColumnName="SomeProperty" />
         <ScalarProperty Name="Title" ColumnName="Title" />
+        <ScalarProperty Name="AssignedToID" ColumnName="AssignedToID" />
         <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
       </MappingFragment>
     </EntityTypeMapping>
@@ -96,8 +97,11 @@
         <ScalarProperty Name="FirstName" ColumnName="FirstName" />
         <ScalarProperty Name="IdentificationNumber" ColumnName="IdentificationNumber" />
         <ScalarProperty Name="LastName" ColumnName="LastName" />
+        <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+        <ScalarProperty Name="Modified" ColumnName="Modified" />
         <ScalarProperty Name="Name" ColumnName="Name" />
         <ScalarProperty Name="TestPeriod" ColumnName="TestPeriod" />
+        <ScalarProperty Name="UserName" ColumnName="UserName" />
         <ScalarProperty Name="VAT" ColumnName="VAT" />
         <ScalarProperty Name="WorkFinished" ColumnName="WorkFinished" />
         <ScalarProperty Name="WorkStarted" ColumnName="WorkStarted" />
@@ -135,6 +139,16 @@
       <MappingFragment StoreEntitySet="Bookstore_Person">
         <ScalarProperty Name="ID" ColumnName="ID" />
         <ScalarProperty Name="Name" ColumnName="Name" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
+  <EntitySetMapping Name="Bookstore_Review">
+    <EntityTypeMapping TypeName="Rhetos.Bookstore_Review">
+      <MappingFragment StoreEntitySet="Bookstore_Review">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+        <ScalarProperty Name="BookID" ColumnName="BookID" />
+        <ScalarProperty Name="Score" ColumnName="Score" />
+        <ScalarProperty Name="Text" ColumnName="Text" />
       </MappingFragment>
     </EntityTypeMapping>
   </EntitySetMapping>

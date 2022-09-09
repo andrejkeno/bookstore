@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "Bookstore.Service/1.0.0": {
         "dependencies": {
+          "Bookstore.RhetosExtensions": "1.0.0",
           "Microsoft.Extensions.Configuration": "6.0.1",
           "Rhetos.CommonConcepts": "5.2.0",
           "Rhetos.Host": "5.2.0",
@@ -1029,6 +1030,15 @@
             "fileVersion": "6.0.21.52210"
           }
         }
+      },
+      "Bookstore.RhetosExtensions/1.0.0": {
+        "dependencies": {
+          "Rhetos": "5.2.0",
+          "Rhetos.CommonConcepts": "5.2.0"
+        },
+        "runtime": {
+          "Bookstore.RhetosExtensions.dll": {}
+        }
       }
     }
   },
@@ -1618,6 +1628,11 @@
       "sha512": "sha512-IXoJOXIqc39AIe+CIR7koBtRGMiCt/LPM3lI+PELtDIy9XdyeSrwXFdWV9dzJ2Awl0paLWUaknLxFQ5HpHZUog==",
       "path": "system.windows.extensions/6.0.0",
       "hashPath": "system.windows.extensions.6.0.0.nupkg.sha512"
+    },
+    "Bookstore.RhetosExtensions/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

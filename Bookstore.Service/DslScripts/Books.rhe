@@ -25,14 +25,19 @@
 // nested
 Module Bookstore
 {
+	//CodeTable Codes;
+
 	Entity Book
 	{
+	   //MonitoredRecord;
+
 	   ShortString Code { AutoCode; Required; Unique; }
 	   ShortString Title { Required; }
 	   Integer NumberOfPages;
 	   ShortString SomeProperty;
 
 	   Reference Author Bookstore.Person;
+	   Reference AssignedTo Bookstore.Employee; // Only the assigned person should be allowed to edit the book data.
 
 	   ItemFilter CommonMisspelling 'book => book.Title.Contains("curiousity")';
 	   InvalidData CommonMisspelling 'It is not allowed to enter misspelled word "curiousity".';
@@ -61,7 +66,59 @@ Module Bookstore
 
             return books;
         }';
+
+		RowPermissions
+        {
+            AllowRead EveryoneCanRead3 'context => book => true';
+
+            AllowWrite OwnerCanWrite2 'context =>
+            {
+                return book => book.AssignedTo.UserName == context.UserInfo.UserName;
+            }';
+        }
 	}
+
+	Entity Review
+    {
+        Reference Book { Required; }
+        Integer Score { Required; MinValue 1; MaxValue 5; }
+        LongString Text;
+
+        SaveMethod
+        {
+            Initialization DefaultTextFromScore
+            '
+                foreach (var item in insertedNew)
+                    if (string.IsNullOrEmpty(item.Text) && item.Score != null)
+                        item.Text = item.Score.Value >= 3
+                            ? "I like it"
+                            : "I don''t like it";
+            ';
+
+			LoadOldItems
+			{
+				Take Score;
+				Take 'Book.Title';
+			}
+
+            OnSaveValidate DenyChangeOfLockedTitle
+            '
+                var itemsWithModifiedScore = updatedOld
+                    .Zip(updatedNew, (oldValue, newValue) => new { oldValue, newValue })
+                    .Where(modified => modified.oldValue.Score == null && modified.newValue.Score != null
+                        || modified.oldValue.Score != null && !modified.oldValue.Score.Equals(modified.newValue.Score))
+                    .Where(modified => modified.oldValue.BookTitle.IndexOf("lock", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    .FirstOrDefault();
+
+                if (itemsWithModifiedScore != null)
+                    throw new Rhetos.UserException(string.Format(
+                        "It is not allowed to modify score ({0} => {1}) for the book \"{2}\" because to contains \"lock\" in the title.",
+                        itemsWithModifiedScore.oldValue.Score,
+                        itemsWithModifiedScore.newValue.Score,
+                        itemsWithModifiedScore.oldValue.BookTitle));
+            ';
+        }
+    }
 
 	Parameter LongBooks3
 	{
@@ -127,6 +184,11 @@ Module Bookstore
 
 		DateTime Created { CreationTime; }
         DateTime Modified { ModificationTimeOf Bookstore.Comment.Text; }
+
+		RowPermissions
+		{
+			InheritFrom Bookstore.Comment.Book;
+		}
 	}
 
 	Entity ChildrensBook

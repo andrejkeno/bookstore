@@ -71,6 +71,7 @@ namespace Common
             { "Bookstore.Manager", Bookstore.Repositories.Manager_Repository.GetReadParameterTypes },
             { "Bookstore.Person", Bookstore.Repositories.Person_Repository.GetReadParameterTypes },
             { "Bookstore.PersonInfo", Bookstore.Repositories.PersonInfo_Repository.GetReadParameterTypes },
+            { "Bookstore.Review", Bookstore.Repositories.Review_Repository.GetReadParameterTypes },
             { "Bookstore.Topic", Bookstore.Repositories.Topic_Repository.GetReadParameterTypes },
             { "Common.AutoCodeCache", Common.Repositories.AutoCodeCache_Repository.GetReadParameterTypes },
             { "Common.Claim", Common.Repositories.Claim_Repository.GetReadParameterTypes },
@@ -221,6 +222,7 @@ namespace Common
             builder.RegisterType<Bookstore.Repositories.Manager_Repository>().Keyed<IRepository>("Bookstore.Manager").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Person_Repository>().Keyed<IRepository>("Bookstore.Person").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.PersonInfo_Repository>().Keyed<IRepository>("Bookstore.PersonInfo").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.Review_Repository>().Keyed<IRepository>("Bookstore.Review").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Topic_Repository>().Keyed<IRepository>("Bookstore.Topic").InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.AddToLog_Repository>().Keyed<IRepository>("Common.AddToLog").InstancePerLifetimeScope();
             builder.RegisterType<Common.Repositories.AddToLog_Repository>().Keyed<IActionRepository>("Common.AddToLog").InstancePerLifetimeScope();

@@ -1,22 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookstore.Service", "Bookstore.Service\Bookstore.Service.csproj", "{1B8246BB-7CCF-478A-9F57-82C01F3F3F2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookstore.Service", "Bookstore.Service\Bookstore.Service.csproj", "{1B8246BB-7CCF-478A-9F57-82C01F3F3F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookstore.RhetosExtensions", "Bookstore.RhetosExtensions\Bookstore.RhetosExtensions.csproj", "{B4FA1EDD-A0AA-4264-BE87-5C59DB930850}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1B8246BB-7CCF-478A-9F57-82C01F3F3F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B8246BB-7CCF-478A-9F57-82C01F3F3F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B8246BB-7CCF-478A-9F57-82C01F3F3F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B8246BB-7CCF-478A-9F57-82C01F3F3F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4FA1EDD-A0AA-4264-BE87-5C59DB930850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4FA1EDD-A0AA-4264-BE87-5C59DB930850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4FA1EDD-A0AA-4264-BE87-5C59DB930850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4FA1EDD-A0AA-4264-BE87-5C59DB930850}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18B5848B-5BDC-4A78-A015-46869C5E6398}
 	EndGlobalSection
 EndGlobal

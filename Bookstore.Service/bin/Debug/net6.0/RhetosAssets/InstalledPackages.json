@@ -9275,6 +9275,22 @@
       ]
     },
     {
+      "Id": "Bookstore.RhetosExtensions",
+      "Version": "1.0.0.0",
+      "Dependencies": [
+        {
+          "Id": "Rhetos",
+          "VersionsRange": "5.2.0"
+        },
+        {
+          "Id": "Rhetos.CommonConcepts",
+          "VersionsRange": "5.2.0"
+        }
+      ],
+      "Folder": "C:\\Omega\\Bookstore\\Bookstore.RhetosExtensions",
+      "ContentFiles": []
+    },
+    {
       "Id": "Rhetos.RestGenerator",
       "Version": "5.0.0.0",
       "Dependencies": [

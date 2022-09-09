@@ -31,6 +31,8 @@ namespace Bookstore
         public string SomeProperty { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.Title*/
         public string Title { get; set; }
+        /*PropertyInfo Attribute Bookstore.Book.AssignedToID*/
+        public Guid? AssignedToID { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.AuthorID*/
         public Guid? AuthorID { get; set; }
         /*DataStructureInfo ClassBody Bookstore.Book*/
@@ -165,10 +167,16 @@ namespace Bookstore
         public int? IdentificationNumber { get; set; }
         /*PropertyInfo Attribute Bookstore.Employee.LastName*/
         public string LastName { get; set; }
+        /*PropertyInfo Attribute Bookstore.Employee.MobileNumber*/
+        public string MobileNumber { get; set; }
+        /*PropertyInfo Attribute Bookstore.Employee.Modified*/
+        public DateTime? Modified { get; set; }
         /*PropertyInfo Attribute Bookstore.Employee.Name*/
         public string Name { get; set; }
         /*PropertyInfo Attribute Bookstore.Employee.TestPeriod*/
         public int? TestPeriod { get; set; }
+        /*PropertyInfo Attribute Bookstore.Employee.UserName*/
+        public string UserName { get; set; }
         /*PropertyInfo Attribute Bookstore.Employee.VAT*/
         public int? VAT { get; set; }
         /*PropertyInfo Attribute Bookstore.Employee.WorkFinished*/
@@ -270,6 +278,12 @@ namespace Bookstore
         /*DataStructureInfo ClassBody Bookstore.Manager*/
     }
 
+    /*DataStructureInfo ClassAttributes Bookstore.MobileNumber_RegExMatchFilter*/
+    public class MobileNumber_RegExMatchFilter/*DataStructureInfo ClassInterace Bookstore.MobileNumber_RegExMatchFilter*/
+    {
+        /*DataStructureInfo ClassBody Bookstore.MobileNumber_RegExMatchFilter*/
+    }
+
     /*DataStructureInfo ClassAttributes Bookstore.Person*/
     public class Person : EntityBase<Bookstore.Person>/*Next DataStructureInfo ClassInterace Bookstore.Person*/
     {
@@ -298,6 +312,30 @@ namespace Bookstore
         /*PropertyInfo Attribute Bookstore.PersonInfo.PersonID*/
         public Guid? PersonID { get; set; }
         /*DataStructureInfo ClassBody Bookstore.PersonInfo*/
+    }
+
+    /*DataStructureInfo ClassAttributes Bookstore.Review*/
+    public class Review : EntityBase<Bookstore.Review>/*Next DataStructureInfo ClassInterace Bookstore.Review*/
+    {
+        /*PropertyInfo Attribute Bookstore.Review.BookID*/
+        public Guid? BookID { get; set; }
+        /*PropertyInfo Attribute Bookstore.Review.Score*/
+        public int? Score { get; set; }
+        /*PropertyInfo Attribute Bookstore.Review.Text*/
+        public string Text { get; set; }
+        /*DataStructureInfo ClassBody Bookstore.Review*/
+    }
+
+    /*DataStructureInfo ClassAttributes Bookstore.Score_MaxValueFilter*/
+    public class Score_MaxValueFilter/*DataStructureInfo ClassInterace Bookstore.Score_MaxValueFilter*/
+    {
+        /*DataStructureInfo ClassBody Bookstore.Score_MaxValueFilter*/
+    }
+
+    /*DataStructureInfo ClassAttributes Bookstore.Score_MinValueFilter*/
+    public class Score_MinValueFilter/*DataStructureInfo ClassInterace Bookstore.Score_MinValueFilter*/
+    {
+        /*DataStructureInfo ClassBody Bookstore.Score_MinValueFilter*/
     }
 
     /*DataStructureInfo ClassAttributes Bookstore.SystemRequiredActive*/
@@ -402,6 +440,9 @@ namespace Common.Queryable
         /*DataStructureQueryable PropertyAttribute Bookstore.Book.Extension_ChildrensBook*/
         public virtual Common.Queryable.Bookstore_ChildrensBook Extension_ChildrensBook { get; init; }
 
+        /*DataStructureQueryable PropertyAttribute Bookstore.Book.AssignedTo*/
+        public virtual Common.Queryable.Bookstore_Employee AssignedTo { get; init; }
+
         /*DataStructureQueryable PropertyAttribute Bookstore.Book.Extension_ExpectedBookRating*/
         public virtual Common.Queryable.Bookstore_ExpectedBookRating Extension_ExpectedBookRating { get; init; }
 
@@ -435,6 +476,7 @@ namespace Common.Queryable
                 NumberOfPages = item.NumberOfPages,
                 SomeProperty = item.SomeProperty,
                 Title = item.Title,
+                AssignedToID = item.AssignedToID,
                 AuthorID = item.AuthorID/*DataStructureInfo AssignSimpleProperty Bookstore.Book*/
             };
         }
@@ -675,8 +717,11 @@ namespace Common.Queryable
                 FirstName = item.FirstName,
                 IdentificationNumber = item.IdentificationNumber,
                 LastName = item.LastName,
+                MobileNumber = item.MobileNumber,
+                Modified = item.Modified,
                 Name = item.Name,
                 TestPeriod = item.TestPeriod,
+                UserName = item.UserName,
                 VAT = item.VAT,
                 WorkFinished = item.WorkFinished,
                 WorkStarted = item.WorkStarted/*DataStructureInfo AssignSimpleProperty Bookstore.Employee*/
@@ -834,6 +879,33 @@ namespace Common.Queryable
                 Name = item.Name,
                 NameLength = item.NameLength,
                 PersonID = item.PersonID/*DataStructureInfo AssignSimpleProperty Bookstore.PersonInfo*/
+            };
+        }
+    }
+
+    /*DataStructureInfo QueryableClassAttributes Bookstore.Review*/
+    public class Bookstore_Review : global::Bookstore.Review, IQueryableEntity<Bookstore.Review>, System.IEquatable<Bookstore_Review>/*DataStructureInfo QueryableClassInterace Bookstore.Review*/
+    {
+        /*DataStructureQueryable PropertyAttribute Bookstore.Review.Book*/
+        public virtual Common.Queryable.Bookstore_Book Book { get; init; }
+
+        /*DataStructureInfo QueryableClassMembers Bookstore.Review*/
+
+        public bool Equals(Bookstore_Review other)
+        {
+            return other != null && other.ID == ID;
+        }
+
+        /// <summary>Converts the object with navigation properties to a simple object with primitive properties.</summary>
+        public Bookstore.Review ToSimple()
+        {
+            var item = this;
+            return new Bookstore.Review
+            {
+                ID = item.ID,
+                BookID = item.BookID,
+                Score = item.Score,
+                Text = item.Text/*DataStructureInfo AssignSimpleProperty Bookstore.Review*/
             };
         }
     }

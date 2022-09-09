@@ -620,6 +620,21 @@
     "C:\\Users\\AndrejJelic\\.nuget\\packages\\rhetos.restgenerator\\5.0.0\\lib\\net5.0\\Rhetos.Host.AspNet.RestApi.dll": {
       "ModifiedTime": "2022-03-25T16:51:30.0000000Z",
       "TypesWithExports": []
+    },
+    "C:\\Omega\\Bookstore\\Bookstore.RhetosExtensions\\bin\\Debug\\net6.0\\Bookstore.RhetosExtensions.dll": {
+      "ModifiedTime": "2022-09-09T11:37:33.6909388Z",
+      "TypesWithExports": [
+        "Bookstore.RhetosExtensions.CodeTableInfo, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.CodeTableMacro, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.DeactivateOnDeleteCodeGenerator, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.DeactivateOnDeleteInfo, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.LastModifiedTimeCodeGenerator, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.LastModifiedTimeInfo, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.MonitoredRecordInfo, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.MonitoredRecordMacro, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.PhoneNumberInfo, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "Bookstore.RhetosExtensions.PhoneNumberMacro, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      ]
     }
   }
 }

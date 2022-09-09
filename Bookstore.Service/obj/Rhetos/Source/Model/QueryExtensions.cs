@@ -24,6 +24,7 @@ namespace System.Linq
                 NumberOfPages = item.NumberOfPages,
                 SomeProperty = item.SomeProperty,
                 Title = item.Title,
+                AssignedToID = item.AssignedToID,
                 AuthorID = item.AuthorID/*DataStructureInfo AssignSimpleProperty Bookstore.Book*/
             });
         }
@@ -120,8 +121,11 @@ namespace System.Linq
                 FirstName = item.FirstName,
                 IdentificationNumber = item.IdentificationNumber,
                 LastName = item.LastName,
+                MobileNumber = item.MobileNumber,
+                Modified = item.Modified,
                 Name = item.Name,
                 TestPeriod = item.TestPeriod,
+                UserName = item.UserName,
                 VAT = item.VAT,
                 WorkFinished = item.WorkFinished,
                 WorkStarted = item.WorkStarted/*DataStructureInfo AssignSimpleProperty Bookstore.Employee*/
@@ -183,6 +187,17 @@ namespace System.Linq
                 Name = item.Name,
                 NameLength = item.NameLength,
                 PersonID = item.PersonID/*DataStructureInfo AssignSimpleProperty Bookstore.PersonInfo*/
+            });
+        }
+        /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>
+        public static IQueryable<Bookstore.Review> ToSimple(this IQueryable<Common.Queryable.Bookstore_Review> query)
+        {
+            return query.Select(item => new Bookstore.Review
+            {
+                ID = item.ID,
+                BookID = item.BookID,
+                Score = item.Score,
+                Text = item.Text/*DataStructureInfo AssignSimpleProperty Bookstore.Review*/
             });
         }
         /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>

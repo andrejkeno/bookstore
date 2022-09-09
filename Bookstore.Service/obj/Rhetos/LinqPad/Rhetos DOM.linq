@@ -2,7 +2,7 @@
   <Reference Relative="..\Bookstore.Service.dll">Bookstore.Service.dll</Reference>
   <Reference Relative="..\Bookstore.Service.deps.json">Bookstore.Service.deps.json</Reference>
   <Reference Relative="..\Bookstore.Service.runtimeconfig.json">Bookstore.Service.runtimeconfig.json</Reference>
-  
+  <Reference Relative="..\Bookstore.RhetosExtensions.dll">Bookstore.RhetosExtensions.dll</Reference>
   <Reference Relative="..\Autofac.dll">..\Autofac.dll</Reference>
   <Reference Relative="..\EntityFramework.dll">..\EntityFramework.dll</Reference>
   <Reference Relative="..\EntityFramework.SqlServer.dll">..\EntityFramework.SqlServer.dll</Reference>

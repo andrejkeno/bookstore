@@ -2,6 +2,11 @@
 using Rhetos;
 using Rhetos.Processing;
 using Rhetos.Processing.DefaultCommands;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bookstore.Service.Controllers
 {
@@ -11,6 +16,17 @@ namespace Bookstore.Service.Controllers
 
         private readonly IProcessingEngine processingEngine;
         private readonly IUnitOfWork unitOfWork;
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task Login()
+        {
+            var claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, "SampleUser") }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties() { IsPersistent = true });
+        }
 
         public DemoController(
             IRhetosComponent<IProcessingEngine> processingEngine,
