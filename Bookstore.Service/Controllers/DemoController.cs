@@ -17,6 +17,15 @@ namespace Bookstore.Service.Controllers
         private readonly IProcessingEngine processingEngine;
         private readonly IUnitOfWork unitOfWork;
 
+        public DemoController(
+            IRhetosComponent<IProcessingEngine> processingEngine,
+            IRhetosComponent<IUnitOfWork> unitOfWork
+            )
+        {
+            this.processingEngine = processingEngine.Value;
+            this.unitOfWork = unitOfWork.Value;
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task Login()
@@ -26,15 +35,6 @@ namespace Bookstore.Service.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 new AuthenticationProperties() { IsPersistent = true });
-        }
-
-        public DemoController(
-            IRhetosComponent<IProcessingEngine> processingEngine,
-            IRhetosComponent<IUnitOfWork> unitOfWork
-            )
-        {
-            this.processingEngine = processingEngine.Value;
-            this.unitOfWork = unitOfWork.Value;
         }
 
         [HttpGet]
