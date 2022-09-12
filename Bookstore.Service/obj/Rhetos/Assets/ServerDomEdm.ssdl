@@ -36,9 +36,11 @@
     </Key>
     <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Code" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="CreatedAt" Type="datetime2" Precision="3" Nullable="true" />
     <Property Name="NumberOfPages" Type="int" Nullable="true" />
     <Property Name="SomeProperty" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Title" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="UpdatedAt" Type="datetime2" Precision="3" Nullable="true" />
     <Property Name="AssignedToID" Type="uniqueidentifier" customannotation:Index="{ Name: IX_AssignedToID, Order: 0 }" Nullable="true" />
     <Property Name="AuthorID" Type="uniqueidentifier" customannotation:Index="{ Name: IX_AuthorID, Order: 0 }" Nullable="true" />
   </EntityType>
@@ -71,6 +73,14 @@
     <Property Name="ID" Type="uniqueidentifier" Nullable="false"  customannotation:Index="{ Name: IX_ID, Order: 0 }"/>
     <Property Name="AgeFrom" Type="int" Nullable="true" />
     <Property Name="AgeTo" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Bookstore_Codes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Code" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="Bookstore_Comment">
     <Key>
@@ -668,6 +678,7 @@
     <EntitySet Name="Bookstore_BookTopic" EntityType="Self.Bookstore_BookTopic" Schema="Bookstore" Table="BookTopic" />
     <EntitySet Name="Bookstore_BookTopics" EntityType="Self.Bookstore_BookTopics" Schema="Bookstore" Table="BookTopics" />
     <EntitySet Name="Bookstore_ChildrensBook" EntityType="Self.Bookstore_ChildrensBook" Schema="Bookstore" Table="ChildrensBook" />
+    <EntitySet Name="Bookstore_Codes" EntityType="Self.Bookstore_Codes" Schema="Bookstore" Table="Codes" />
     <EntitySet Name="Bookstore_Comment" EntityType="Self.Bookstore_Comment" Schema="Bookstore" Table="Comment" />
     <EntitySet Name="Bookstore_Department" EntityType="Self.Bookstore_Department" Schema="Bookstore" Table="Department" />
     <EntitySet Name="Bookstore_Disposal" EntityType="Self.Bookstore_Disposal" Schema="Bookstore" Table="Disposal" />

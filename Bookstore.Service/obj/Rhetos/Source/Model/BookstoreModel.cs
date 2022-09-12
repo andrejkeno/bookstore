@@ -25,12 +25,16 @@ namespace Bookstore
     {
         /*PropertyInfo Attribute Bookstore.Book.Code*/
         public string Code { get; set; }
+        /*PropertyInfo Attribute Bookstore.Book.CreatedAt*/
+        public DateTime? CreatedAt { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.NumberOfPages*/
         public int? NumberOfPages { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.SomeProperty*/
         public string SomeProperty { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.Title*/
         public string Title { get; set; }
+        /*PropertyInfo Attribute Bookstore.Book.UpdatedAt*/
+        public DateTime? UpdatedAt { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.AssignedToID*/
         public Guid? AssignedToID { get; set; }
         /*PropertyInfo Attribute Bookstore.Book.AuthorID*/
@@ -78,6 +82,16 @@ namespace Bookstore
     public class Code_RegExMatchFilter/*DataStructureInfo ClassInterace Bookstore.Code_RegExMatchFilter*/
     {
         /*DataStructureInfo ClassBody Bookstore.Code_RegExMatchFilter*/
+    }
+
+    /*DataStructureInfo ClassAttributes Bookstore.Codes*/
+    public class Codes : EntityBase<Bookstore.Codes>/*Next DataStructureInfo ClassInterace Bookstore.Codes*/
+    {
+        /*PropertyInfo Attribute Bookstore.Codes.Code*/
+        public string Code { get; set; }
+        /*PropertyInfo Attribute Bookstore.Codes.Name*/
+        public string Name { get; set; }
+        /*DataStructureInfo ClassBody Bookstore.Codes*/
     }
 
     /*DataStructureInfo ClassAttributes Bookstore.Comment*/
@@ -473,9 +487,11 @@ namespace Common.Queryable
             {
                 ID = item.ID,
                 Code = item.Code,
+                CreatedAt = item.CreatedAt,
                 NumberOfPages = item.NumberOfPages,
                 SomeProperty = item.SomeProperty,
                 Title = item.Title,
+                UpdatedAt = item.UpdatedAt,
                 AssignedToID = item.AssignedToID,
                 AuthorID = item.AuthorID/*DataStructureInfo AssignSimpleProperty Bookstore.Book*/
             };
@@ -583,6 +599,29 @@ namespace Common.Queryable
                 ID = item.ID,
                 AgeFrom = item.AgeFrom,
                 AgeTo = item.AgeTo/*DataStructureInfo AssignSimpleProperty Bookstore.ChildrensBook*/
+            };
+        }
+    }
+
+    /*DataStructureInfo QueryableClassAttributes Bookstore.Codes*/
+    public class Bookstore_Codes : global::Bookstore.Codes, IQueryableEntity<Bookstore.Codes>, System.IEquatable<Bookstore_Codes>/*DataStructureInfo QueryableClassInterace Bookstore.Codes*/
+    {
+        /*DataStructureInfo QueryableClassMembers Bookstore.Codes*/
+
+        public bool Equals(Bookstore_Codes other)
+        {
+            return other != null && other.ID == ID;
+        }
+
+        /// <summary>Converts the object with navigation properties to a simple object with primitive properties.</summary>
+        public Bookstore.Codes ToSimple()
+        {
+            var item = this;
+            return new Bookstore.Codes
+            {
+                ID = item.ID,
+                Code = item.Code,
+                Name = item.Name/*DataStructureInfo AssignSimpleProperty Bookstore.Codes*/
             };
         }
     }

@@ -22,6 +22,8 @@ namespace Bookstore.RhetosExtensions
                 Name = "CreatedAt"
             };
 
+            concepts.Add(createdAt);
+
             concepts.Add(new CreationTimeInfo() { Property = createdAt });
             concepts.Add(new DenyUserEditPropertyInfo() { Property = createdAt });
 
@@ -31,11 +33,16 @@ namespace Bookstore.RhetosExtensions
                 Name = "UpdatedAt"
             };
 
+            concepts.Add(updatedAt);
+
             concepts.Add(new LastModifiedTimeInfo() { Property = updatedAt });
             concepts.Add(new DenyUserEditPropertyInfo() { Property = updatedAt });
 
+            EntityLoggingInfo entityLoggingInfo = new EntityLoggingInfo() { Entity = conceptInfo.Entity };
+
+            concepts.Add(entityLoggingInfo);
             concepts.Add(new AllPropertiesLoggingInfo() { 
-                EntityLogging = new EntityLoggingInfo() { Entity = conceptInfo.Entity } 
+                EntityLogging = entityLoggingInfo
             });
 
             return concepts;

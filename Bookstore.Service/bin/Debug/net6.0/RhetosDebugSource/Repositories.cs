@@ -60,6 +60,7 @@ namespace Common
             { "Bookstore.BookTopic", Bookstore.Repositories.BookTopic_Repository.GetReadParameterTypes },
             { "Bookstore.BookTopics", Bookstore.Repositories.BookTopics_Repository.GetReadParameterTypes },
             { "Bookstore.ChildrensBook", Bookstore.Repositories.ChildrensBook_Repository.GetReadParameterTypes },
+            { "Bookstore.Codes", Bookstore.Repositories.Codes_Repository.GetReadParameterTypes },
             { "Bookstore.Comment", Bookstore.Repositories.Comment_Repository.GetReadParameterTypes },
             { "Bookstore.Department", Bookstore.Repositories.Department_Repository.GetReadParameterTypes },
             { "Bookstore.Disposal", Bookstore.Repositories.Disposal_Repository.GetReadParameterTypes },
@@ -209,6 +210,7 @@ namespace Common
             builder.RegisterType<Bookstore.Repositories.BookTopic_Repository>().Keyed<IRepository>("Bookstore.BookTopic").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.BookTopics_Repository>().Keyed<IRepository>("Bookstore.BookTopics").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.ChildrensBook_Repository>().Keyed<IRepository>("Bookstore.ChildrensBook").InstancePerLifetimeScope();
+            builder.RegisterType<Bookstore.Repositories.Codes_Repository>().Keyed<IRepository>("Bookstore.Codes").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Comment_Repository>().Keyed<IRepository>("Bookstore.Comment").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Department_Repository>().Keyed<IRepository>("Bookstore.Department").InstancePerLifetimeScope();
             builder.RegisterType<Bookstore.Repositories.Disposal_Repository>().Keyed<IRepository>("Bookstore.Disposal").InstancePerLifetimeScope();

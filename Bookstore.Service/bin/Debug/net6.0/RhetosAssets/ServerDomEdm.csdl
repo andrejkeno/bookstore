@@ -85,9 +85,11 @@
     </Key>
     <Property Name="ID" Type="Guid" Nullable="false" />
     <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedAt" Type="DateTime" />
     <Property Name="NumberOfPages" Type="Int32" />
     <Property Name="SomeProperty" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UpdatedAt" Type="DateTime" />
     <Property Name="AssignedToID" Type="Guid" />
     <Property Name="AuthorID" Type="Guid" />
     <NavigationProperty Name="Extension_BookInfo" Relationship="Self.Bookstore_BookInfo_Base" FromRole="Bookstore_BookInfo_Base_Target" ToRole="Bookstore_BookInfo_Base_Source" />
@@ -131,6 +133,14 @@
     <Property Name="AgeFrom" Type="Int32" />
     <Property Name="AgeTo" Type="Int32" />
     <NavigationProperty Name="Base" Relationship="Self.Bookstore_ChildrensBook_Base" FromRole="Bookstore_ChildrensBook_Base_Source" ToRole="Bookstore_ChildrensBook_Base_Target" />
+  </EntityType>
+  <EntityType Name="Bookstore_Codes" customannotation:ClrType="Common.Queryable.Bookstore_Codes, Bookstore.Service">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Bookstore_Comment" customannotation:ClrType="Common.Queryable.Bookstore_Comment, Bookstore.Service">
     <Key>
@@ -749,6 +759,7 @@
     <EntitySet Name="Bookstore_BookTopic" EntityType="Self.Bookstore_BookTopic" />
     <EntitySet Name="Bookstore_BookTopics" EntityType="Self.Bookstore_BookTopics" />
     <EntitySet Name="Bookstore_ChildrensBook" EntityType="Self.Bookstore_ChildrensBook" />
+    <EntitySet Name="Bookstore_Codes" EntityType="Self.Bookstore_Codes" />
     <EntitySet Name="Bookstore_Comment" EntityType="Self.Bookstore_Comment" />
     <EntitySet Name="Bookstore_Department" EntityType="Self.Bookstore_Department" />
     <EntitySet Name="Bookstore_Disposal" EntityType="Self.Bookstore_Disposal" />

@@ -6,9 +6,11 @@
       <MappingFragment StoreEntitySet="Bookstore_Book">
         <ScalarProperty Name="ID" ColumnName="ID" />
         <ScalarProperty Name="Code" ColumnName="Code" />
+        <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
         <ScalarProperty Name="NumberOfPages" ColumnName="NumberOfPages" />
         <ScalarProperty Name="SomeProperty" ColumnName="SomeProperty" />
         <ScalarProperty Name="Title" ColumnName="Title" />
+        <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
         <ScalarProperty Name="AssignedToID" ColumnName="AssignedToID" />
         <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
       </MappingFragment>
@@ -45,6 +47,15 @@
         <ScalarProperty Name="ID" ColumnName="ID" />
         <ScalarProperty Name="AgeFrom" ColumnName="AgeFrom" />
         <ScalarProperty Name="AgeTo" ColumnName="AgeTo" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
+  <EntitySetMapping Name="Bookstore_Codes">
+    <EntityTypeMapping TypeName="Rhetos.Bookstore_Codes">
+      <MappingFragment StoreEntitySet="Bookstore_Codes">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+        <ScalarProperty Name="Code" ColumnName="Code" />
+        <ScalarProperty Name="Name" ColumnName="Name" />
       </MappingFragment>
     </EntityTypeMapping>
   </EntitySetMapping>

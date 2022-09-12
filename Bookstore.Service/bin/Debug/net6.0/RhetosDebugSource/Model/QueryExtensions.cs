@@ -21,9 +21,11 @@ namespace System.Linq
             {
                 ID = item.ID,
                 Code = item.Code,
+                CreatedAt = item.CreatedAt,
                 NumberOfPages = item.NumberOfPages,
                 SomeProperty = item.SomeProperty,
                 Title = item.Title,
+                UpdatedAt = item.UpdatedAt,
                 AssignedToID = item.AssignedToID,
                 AuthorID = item.AuthorID/*DataStructureInfo AssignSimpleProperty Bookstore.Book*/
             });
@@ -64,6 +66,16 @@ namespace System.Linq
                 ID = item.ID,
                 AgeFrom = item.AgeFrom,
                 AgeTo = item.AgeTo/*DataStructureInfo AssignSimpleProperty Bookstore.ChildrensBook*/
+            });
+        }
+        /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>
+        public static IQueryable<Bookstore.Codes> ToSimple(this IQueryable<Common.Queryable.Bookstore_Codes> query)
+        {
+            return query.Select(item => new Bookstore.Codes
+            {
+                ID = item.ID,
+                Code = item.Code,
+                Name = item.Name/*DataStructureInfo AssignSimpleProperty Bookstore.Codes*/
             });
         }
         /// <summary>Converts the objects with navigation properties to simple objects with primitive properties.</summary>

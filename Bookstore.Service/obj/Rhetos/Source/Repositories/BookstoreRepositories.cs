@@ -38,6 +38,9 @@ namespace Bookstore.Repositories
         private ChildrensBook_Repository _ChildrensBook_Repository;
         public ChildrensBook_Repository ChildrensBook { get { return _ChildrensBook_Repository ?? (_ChildrensBook_Repository = (ChildrensBook_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.ChildrensBook")); } }
 
+        private Codes_Repository _Codes_Repository;
+        public Codes_Repository Codes { get { return _Codes_Repository ?? (_Codes_Repository = (Codes_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Codes")); } }
+
         private Comment_Repository _Comment_Repository;
         public Comment_Repository Comment { get { return _Comment_Repository ?? (_Comment_Repository = (Comment_Repository)Rhetos.Extensibility.NamedPluginsExtensions.GetPlugin(_repositories, @"Bookstore.Comment")); } }
 
@@ -128,8 +131,41 @@ namespace Bookstore.Repositories
 
             /*DataStructureInfo WritableOrm ClearContext Bookstore.Book*/
 
+            if (checkUserPermissions)
+            {
+                var invalidItem = insertedNew.Where(newItem => newItem.CreatedAt != null).FirstOrDefault();
+
+                if (invalidItem != null)
+                    throw new Rhetos.UserException(
+                        "It is not allowed to directly enter {0} property of {1}.",
+                        new[] { _localizer["CreatedAt"], _localizer["Bookstore.Book"] },
+                        "DataStructure:Bookstore.Book,ID:" + invalidItem.ID + ",Property:CreatedAt",
+                        null);
+            
+            }
+
+            if (checkUserPermissions)
+            {
+                var invalidItem = insertedNew.Where(newItem => newItem.UpdatedAt != null).FirstOrDefault();
+
+                if (invalidItem != null)
+                    throw new Rhetos.UserException(
+                        "It is not allowed to directly enter {0} property of {1}.",
+                        new[] { _localizer["UpdatedAt"], _localizer["Bookstore.Book"] },
+                        "DataStructure:Bookstore.Book,ID:" + invalidItem.ID + ",Property:UpdatedAt",
+                        null);
+            
+            }
+
             /*DataStructureInfo WritableOrm ArgumentValidation Bookstore.Book*/
 
+            { 
+                var now = SqlUtility.GetDatabaseTime(_executionContext.SqlExecuter);
+
+                foreach (var newItem in insertedNew)
+                    if(newItem.CreatedAt == null)
+                        newItem.CreatedAt = now;
+            }
             /*DataStructureInfo WritableOrm Initialization Bookstore.Book*/
 
             // Using old data, including lazy loading of navigation properties:
@@ -151,6 +187,51 @@ namespace Bookstore.Repositories
                 insertedNew.Select(item => AutoCodeItem.Create(item, item.Code/*AutoCodePropertyInfo Grouping Bookstore.Book.Code*/)).ToList(),
                 (item, newCode) => item.Code = newCode/*AutoCodePropertyInfo GroupColumnMetadata Bookstore.Book.Code*/);
 
+            if (checkUserPermissions)
+            {
+                var changes = updatedNew.Zip(updated, (newItem, oldItem) => new { newItem, oldItem });
+                foreach (var change in changes)
+                    if (change.newItem.CreatedAt == null && change.oldItem.CreatedAt != null)
+                        change.newItem.CreatedAt = change.oldItem.CreatedAt;
+                var invalidItem = changes
+                    .Where(change => change.newItem.CreatedAt != null && !change.newItem.CreatedAt.Equals(change.oldItem.CreatedAt) || change.newItem.CreatedAt == null && change.oldItem.CreatedAt != null)
+                    .Select(change => change.newItem)
+                    .FirstOrDefault();
+
+                if (invalidItem != null)
+                    throw new Rhetos.UserException(
+                        "It is not allowed to directly enter {0} property of {1}.",
+                        new[] { _localizer["CreatedAt"], _localizer["Bookstore.Book"] },
+                        "DataStructure:Bookstore.Book,ID:" + invalidItem.ID + ",Property:CreatedAt",
+                        null);
+            
+            }
+
+            if (checkUserPermissions)
+            {
+                var changes = updatedNew.Zip(updated, (newItem, oldItem) => new { newItem, oldItem });
+                foreach (var change in changes)
+                    if (change.newItem.UpdatedAt == null && change.oldItem.UpdatedAt != null)
+                        change.newItem.UpdatedAt = change.oldItem.UpdatedAt;
+                var invalidItem = changes
+                    .Where(change => change.newItem.UpdatedAt != null && !change.newItem.UpdatedAt.Equals(change.oldItem.UpdatedAt) || change.newItem.UpdatedAt == null && change.oldItem.UpdatedAt != null)
+                    .Select(change => change.newItem)
+                    .FirstOrDefault();
+
+                if (invalidItem != null)
+                    throw new Rhetos.UserException(
+                        "It is not allowed to directly enter {0} property of {1}.",
+                        new[] { _localizer["UpdatedAt"], _localizer["Bookstore.Book"] },
+                        "DataStructure:Bookstore.Book,ID:" + invalidItem.ID + ",Property:UpdatedAt",
+                        null);
+            
+            }
+
+            { 
+                var now = SqlUtility.GetDatabaseTime(_executionContext.SqlExecuter);
+                foreach (var updatedItem in updatedNew)
+                    updatedItem.UpdatedAt = now;
+            }
             if (deletedIds.Count() > 0)
             {
                 List<Bookstore.BookTopic> childItems = deletedIds
@@ -707,6 +788,144 @@ namespace Bookstore.Repositories
         }
 
         /*DataStructureInfo RepositoryMembers Bookstore.ChildrensBook*/
+    }
+
+    /*DataStructureInfo RepositoryAttributes Bookstore.Codes*/
+    public partial class Codes_Repository : /*DataStructureInfo OverrideBaseType Bookstore.Codes*/ Common.OrmRepositoryBase<Common.Queryable.Bookstore_Codes, Bookstore.Codes> // Common.QueryableRepositoryBase<Common.Queryable.Bookstore_Codes, Bookstore.Codes> // Common.ReadableRepositoryBase<Bookstore.Codes> // global::Common.RepositoryBase
+        , IWritableRepository<Bookstore.Codes>, IValidateRepository/*DataStructureInfo RepositoryInterface Bookstore.Codes*/
+    {
+        private readonly Rhetos.Utilities.ILocalizer<Bookstore.Codes> _localizer;
+        private readonly Rhetos.Utilities.ISqlUtility _sqlUtility;
+        /*DataStructureInfo RepositoryPrivateMembers Bookstore.Codes*/
+
+        public Codes_Repository(Common.DomRepository domRepository, Common.ExecutionContext executionContext, Rhetos.Utilities.ILocalizer<Bookstore.Codes> _localizer, Rhetos.Utilities.ISqlUtility _sqlUtility/*DataStructureInfo RepositoryConstructorArguments Bookstore.Codes*/)
+        {
+            _domRepository = domRepository;
+            _executionContext = executionContext;
+            this._localizer = _localizer;
+            this._sqlUtility = _sqlUtility;
+            /*DataStructureInfo RepositoryConstructorCode Bookstore.Codes*/
+        }
+
+        public static KeyValuePair<string, Type>[] GetReadParameterTypes()
+        {
+            return new KeyValuePair<string, Type>[]
+            {
+                new KeyValuePair<string, Type>(@"Bookstore.SystemRequiredCode", typeof(Bookstore.SystemRequiredCode)),
+                /*DataStructureInfo ReadParameterTypes Bookstore.Codes*/
+            };
+        }
+        
+        public virtual void Save(IEnumerable<Bookstore.Codes> insertedNew, IEnumerable<Bookstore.Codes> updatedNew, IEnumerable<Bookstore.Codes> deletedIds, bool checkUserPermissions = false)
+        {
+            if (!DomHelper.InitializeSaveMethodItems(ref insertedNew, ref updatedNew, ref deletedIds))
+                return;
+
+            /*DataStructureInfo WritableOrm ClearContext Bookstore.Codes*/
+
+            /*DataStructureInfo WritableOrm ArgumentValidation Bookstore.Codes*/
+
+            /*DataStructureInfo WritableOrm Initialization Bookstore.Codes*/
+
+            // Using old data, including lazy loading of navigation properties:
+
+            IEnumerable<Common.Queryable.Bookstore_Codes> deleted = DomHelper.LoadOldDataWithNavigationProperties(deletedIds, this);
+            IEnumerable<Common.Queryable.Bookstore_Codes> updated = DomHelper.LoadOldDataWithNavigationProperties(updatedNew, this);
+
+            foreach (var newItem in insertedNew.Concat(updatedNew))
+                ShortStringPropertyCodeGenerator.CheckMaxLength(newItem.Code, newItem, "Bookstore", "Codes", "Code");
+
+            foreach (var newItem in insertedNew.Concat(updatedNew))
+                ShortStringPropertyCodeGenerator.CheckMaxLength(newItem.Name, newItem, "Bookstore", "Codes", "Name");
+
+            AutoCodeHelper.UpdateCodesWithoutCache(
+                _executionContext.SqlExecuter, "Bookstore.Codes", "Code",
+                insertedNew.Select(item => AutoCodeItem.Create(item, item.Code/*AutoCodePropertyInfo Grouping Bookstore.Codes.Code*/)).ToList(),
+                (item, newCode) => item.Code = newCode/*AutoCodePropertyInfo GroupColumnMetadata Bookstore.Codes.Code*/);
+
+            /*DataStructureInfo WritableOrm OldDataLoaded Bookstore.Codes*/
+
+            {
+                var invalid = insertedNew.Concat(updatedNew).FirstOrDefault(item => item.Name == null || string.IsNullOrWhiteSpace(item.Name) /*RequiredPropertyInfo OrCondition Bookstore.Codes.Name*/);
+                if (invalid != null)
+                    throw new Rhetos.UserException("It is not allowed to enter {0} because the required property {1} is not set.",
+                        new[] { _localizer["Bookstore.Codes"], _localizer["Name"] },
+                        "DataStructure:Bookstore.Codes,ID:" + invalid.ID.ToString() + ",Property:Name", null);
+            }
+            /*DataStructureInfo WritableOrm ProcessedOldData Bookstore.Codes*/
+
+            {
+                DomHelper.WriteToDatabase(insertedNew, updatedNew, deletedIds, _executionContext.PersistenceStorage, checkUserPermissions, _sqlUtility,
+                    out Exception saveException, out Rhetos.RhetosException interpretedException);
+
+                if (saveException != null)
+                {
+                    if (interpretedException is Rhetos.UserException && Rhetos.Utilities.MsSqlUtility.IsUniqueError(interpretedException, @"Bookstore.Codes", @"IX_Codes_Code"))
+                        ((Rhetos.UserException)interpretedException).SystemMessage = @"DataStructure:Bookstore.Codes,Property:Code";
+                    /*DataStructureInfo WritableOrm OnDatabaseError Bookstore.Codes*/
+                    DomHelper.ThrowInterpretedException(checkUserPermissions, saveException, interpretedException, _sqlUtility, "Bookstore.Codes");
+                }
+            }
+
+            deleted = null;
+            updated = this.Query(updatedNew.Select(item => item.ID));
+            IEnumerable<Common.Queryable.Bookstore_Codes> inserted = this.Query(insertedNew.Select(item => item.ID));
+
+            bool allEffectsCompleted = false;
+            try
+            {
+                /*DataStructureInfo WritableOrm OnSaveTag1 Bookstore.Codes*/
+
+                /*DataStructureInfo WritableOrm OnSaveTag2 Bookstore.Codes*/
+
+                Rhetos.Dom.DefaultConcepts.InvalidDataMessage.ValidateOnSave(insertedNew, updatedNew, this, "Bookstore.Codes");
+
+                /*DataStructureInfo WritableOrm AfterSave Bookstore.Codes*/
+
+                allEffectsCompleted = true;
+            }
+            finally
+            {
+                if (!allEffectsCompleted)
+                    _executionContext.PersistenceTransaction.DiscardOnDispose();
+            }
+        }
+
+        public IEnumerable<Rhetos.Dom.DefaultConcepts.InvalidDataMessage> Validate(IList<Guid> ids, bool onSave)
+        {
+            if (onSave)
+            {
+                var errorIds = this.Filter(this.Query(ids), new SystemRequiredCode()).Select(item => item.ID).ToArray();
+                if (errorIds.Count() > 0)
+                    foreach (var error in GetErrorMessage_SystemRequiredCode(errorIds))
+                        yield return error;
+            }
+            /*DataStructureInfo WritableOrm OnSaveValidate Bookstore.Codes*/
+            yield break;
+        }
+
+        public IEnumerable<InvalidDataMessage> GetErrorMessage_SystemRequiredCode(IEnumerable<Guid> invalidData_Ids)
+        {
+            IDictionary<string, object> metadata = new Dictionary<string, object>();
+            metadata["Validation"] = @"SystemRequiredCode";
+            metadata[@"Property"] = @"Code";
+            /*InvalidDataInfo ErrorMetadata Bookstore.Codes.SystemRequiredCode*/
+            /*InvalidDataInfo CustomValidationResult Bookstore.Codes.SystemRequiredCode*/
+            return invalidData_Ids.Select(id => new InvalidDataMessage
+            {
+                ID = id,
+                Message = @"System required property {0} is not set.",
+                MessageParameters = new object[] { @"ShortString Bookstore.Codes.Code" },
+                Metadata = metadata
+            });
+        }
+
+        public IQueryable<Common.Queryable.Bookstore_Codes> Filter(IQueryable<Common.Queryable.Bookstore_Codes> source, Bookstore.SystemRequiredCode parameter)
+        {/*QueryFilterExpressionInfo BeforeFilter Bookstore.Codes.'Bookstore.SystemRequiredCode'*/
+            return source.Where(item => item.Code == null);
+        }
+
+        /*DataStructureInfo RepositoryMembers Bookstore.Codes*/
     }
 
     /*DataStructureInfo RepositoryAttributes Bookstore.Comment*/

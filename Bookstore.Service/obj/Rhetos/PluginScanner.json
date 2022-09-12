@@ -622,7 +622,7 @@
       "TypesWithExports": []
     },
     "C:\\Omega\\Bookstore\\Bookstore.RhetosExtensions\\bin\\Debug\\net6.0\\Bookstore.RhetosExtensions.dll": {
-      "ModifiedTime": "2022-09-09T11:37:33.6909388Z",
+      "ModifiedTime": "2022-09-12T13:10:02.5162028Z",
       "TypesWithExports": [
         "Bookstore.RhetosExtensions.CodeTableInfo, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
         "Bookstore.RhetosExtensions.CodeTableMacro, Bookstore.RhetosExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",

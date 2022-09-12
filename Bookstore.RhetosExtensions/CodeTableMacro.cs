@@ -22,6 +22,8 @@ namespace Bookstore.RhetosExtensions
                 Name = "Code"
             };
 
+            newConcepts.Add(code);
+
             newConcepts.Add(new AutoCodePropertyInfo()
             {
                 Property = code
@@ -32,6 +34,8 @@ namespace Bookstore.RhetosExtensions
                 DataStructure = conceptInfo,
                 Name = "Name"
             };
+
+            newConcepts.Add(name);
 
             newConcepts.Add(new RequiredPropertyInfo()
             {
